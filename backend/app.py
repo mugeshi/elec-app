@@ -1,19 +1,26 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-#Creating the Flask Application
+# Creating the Flask Application
 app = Flask(__name__)
 
-#Database Configuration
+# Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///product.db'
-app.config['SQLACHEMY_TRACK_MODIFICATION'] =False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#initialize the databse with the app
-db.init_app(app)
+db = SQLAlchemy(app)
 
-@app.before_first_request
-def create_tables():
+# Create tables
+with app.app_context():
     db.create_all()
+
+@app.route('/products', methods=['GET'])
+def get_product():
+    products = Product.query.all()
+    return jsonify([product.serialize() for product in products])
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 
