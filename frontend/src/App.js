@@ -1,14 +1,12 @@
-import REact from 'react';
+import React from 'react';
+import HeroSection from './Components/HeroSection';
 
-function App()  {
+function App() {
   return (
-  <div className='app'>
-    <Navbar />
-    <HeroSecction />
-    <Categories />
-    <WhyChooseUs />
-    <FeaturedProduct/>
-  </div>
+    <div>
+      <h1>Hey Nivo Tronics</h1>
+      <HeroSection />
+    </div>
   );
 }
 

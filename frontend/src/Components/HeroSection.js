@@ -1,15 +1,21 @@
 function HeroSection() {
-    return (
-      <section className="hero-section">
+  return (
+    <section className="hero-section">
+      <div className="hero-content">
         <h1>Premium Apple & Samsung Devices</h1>
         <p>
-          Genuine smartphones, tablets, watches, and accessories backed by warranty and trusted support.
+          Shop genuine smartphones, tablets, smartwatches, and accessories.
+          Enjoy competitive prices, warranty coverage, and trusted customer support.
         </p>
+
         <div className="buttons">
           <button className="shop-btn apple-btn">Shop Apple</button>
           <button className="shop-btn samsung-btn">Shop Samsung</button>
         </div>
-        <div className="categories">
+      </div>
+
+      <div className="categories">
+        <div className="category-card">
           <h2>🍎 Apple</h2>
           <ul>
             <li>iPhone</li>
@@ -18,6 +24,9 @@ function HeroSection() {
             <li>AirPods</li>
             <li>MacBook</li>
           </ul>
+        </div>
+
+        <div className="category-card">
           <h2>📱 Samsung</h2>
           <ul>
             <li>Galaxy S Series</li>
@@ -27,6 +36,9 @@ function HeroSection() {
             <li>Galaxy Buds</li>
           </ul>
         </div>
-      </section>
-    );
-  }
+      </div>
+    </section>
+  );
+}
+
+export default HeroSection;
