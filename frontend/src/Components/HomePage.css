@@ -1,0 +1,42 @@
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .hero-video {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+  }
+  
+  .hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 10px;
+  }
+  
+  .hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-content button {
+    padding: 12px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 30px;
+  }
