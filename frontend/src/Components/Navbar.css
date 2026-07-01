@@ -1,44 +1,133 @@
-.navbar {
-    position: fixed;
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Navbar */
+  .navbar {
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-
+    z-index: 1000;
+  
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    padding: 0 60px;
-
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(12px);
-
-    z-index: 1000;
-}
-
-.logo {
+  
+    padding: 18px 8%;
+    background: #fff;
+    border-bottom: 1px solid #ececec;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Logo */
+  .logo {
     font-size: 1.8rem;
     font-weight: 700;
-}
-
-.logo span {
+    color: #111;
+    cursor: pointer;
+  }
+  
+  .logo span {
     color: #0071e3;
-}
-
-.nav-links {
-    display: flex;
-    gap: 35px;
+  }
+  
+  /* Navigation */
+  .nav-links {
     list-style: none;
-}
-
-.nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+  }
+  
+  .nav-links li {
+    position: relative;
+  }
+  
+  .nav-links a {
     text-decoration: none;
-    color: black;
+    color: #333;
+    font-size: 15px;
     font-weight: 500;
-    transition: .3s;
-}
-
-.nav-links a:hover {
+    transition: 0.3s ease;
+  }
+  
+  .nav-links a:hover {
     color: #0071e3;
-}
+  }
+  
+  /* Dropdown */
+  .dropdown-menu {
+    position: absolute;
+    top: 45px;
+    left: 0;
+  
+    width: 220px;
+    background: #fff;
+  
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  
+    list-style: none;
+    padding: 10px 0;
+  
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: 0.3s ease;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .dropdown-menu li {
+    width: 100%;
+  }
+  
+  .dropdown-menu a {
+    display: block;
+    padding: 12px 20px;
+    color: #444;
+    transition: 0.3s;
+  }
+  
+  .dropdown-menu a:hover {
+    background: #f5f5f7;
+    color: #0071e3;
+  }
+  
+  /* Mobile Menu Icon (for future use) */
+  .menu-btn {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+  }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .navbar {
+      padding: 18px 5%;
+    }
+  
+    .nav-links {
+      gap: 20px;
+    }
+  
+    .nav-links a {
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .menu-btn {
+      display: block;
+    }
+  
+    .nav-links {
+      display: none;
+    }
+  }
