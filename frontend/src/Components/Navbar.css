@@ -1,133 +1,322 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Navbar */
-  .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  
-    padding: 18px 8%;
-    background: #fff;
-    border-bottom: 1px solid #ececec;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Logo */
-  .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #111;
-    cursor: pointer;
-  }
-  
-  .logo span {
-    color: #0071e3;
-  }
-  
-  /* Navigation */
-  .nav-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 35px;
-  }
-  
-  .nav-links li {
-    position: relative;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-size: 15px;
-    font-weight: 500;
-    transition: 0.3s ease;
-  }
-  
-  .nav-links a:hover {
-    color: #0071e3;
-  }
-  
-  /* Dropdown */
-  .dropdown-menu {
-    position: absolute;
-    top: 45px;
-    left: 0;
-  
-    width: 220px;
-    background: #fff;
-  
-    border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-  
-    list-style: none;
-    padding: 10px 0;
-  
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: 0.3s ease;
-  }
-  
-  .dropdown:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  
-  .dropdown-menu li {
-    width: 100%;
-  }
-  
-  .dropdown-menu a {
-    display: block;
-    padding: 12px 20px;
-    color: #444;
-    transition: 0.3s;
-  }
-  
-  .dropdown-menu a:hover {
-    background: #f5f5f7;
-    color: #0071e3;
-  }
-  
-  /* Mobile Menu Icon (for future use) */
-  .menu-btn {
-    display: none;
-    font-size: 28px;
-    cursor: pointer;
-  }
-  
-  /* Responsive */
-  @media (max-width: 900px) {
-    .navbar {
-      padding: 18px 5%;
-    }
-  
-    .nav-links {
-      gap: 20px;
-    }
-  
-    .nav-links a {
-      font-size: 14px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .menu-btn {
-      display: block;
-    }
-  
-    .nav-links {
-      display: none;
-    }
-  }
+/* ==========================
+   Google Font
+========================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ==========================
+   Global Styles
+========================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#ffffff;
+    color:#111111;
+}
+
+/* ==========================
+   Navbar
+========================== */
+.navbar{
+    position:sticky;
+    top:0;
+    width:100%;
+    z-index:1000;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 8%;
+
+    background:rgba(255,255,255,.97);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid #ececec;
+}
+
+/* ==========================
+   Logo
+========================== */
+.logo{
+    text-decoration:none;
+    font-size:30px;
+    font-weight:700;
+    color:#111;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:#C9A227;
+}
+
+/* ==========================
+   Navigation
+========================== */
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:35px;
+    list-style:none;
+}
+
+.nav-links li{
+    position:relative;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#111;
+    font-size:15px;
+    font-weight:500;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:#C9A227;
+}
+
+/* Gold underline */
+
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-8px;
+    width:0;
+    height:2px;
+    background:#C9A227;
+    transition:.3s;
+}
+
+.nav-links a:hover::after{
+    width:100%;
+}
+
+/* ==========================
+   Dropdown
+========================== */
+
+.dropdown-menu{
+    position:absolute;
+    top:55px;
+    left:-10px;
+
+    width:240px;
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    list-style:none;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.08);
+
+    opacity:0;
+    visibility:hidden;
+
+    transform:translateY(10px);
+
+    transition:.35s;
+}
+
+.dropdown:hover .dropdown-menu{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+.dropdown-menu li{
+    width:100%;
+}
+
+.dropdown-menu a{
+    display:block;
+    padding:15px 22px;
+    color:#111;
+}
+
+.dropdown-menu a:hover{
+    background:#faf8f2;
+    color:#C9A227;
+}
+
+/* ==========================
+   Right Side
+========================== */
+
+.nav-icons{
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+/* ==========================
+   Search
+========================== */
+
+.search-box{
+
+    display:flex;
+    align-items:center;
+
+    background:#fafafa;
+
+    border:1px solid #ececec;
+
+    border-radius:40px;
+
+    padding:10px 18px;
+
+    width:260px;
+}
+
+.search-icon{
+    color:#999;
+}
+
+.search-box input{
+
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    margin-left:10px;
+
+    font-size:14px;
+}
+
+.search-box:focus-within{
+
+    border-color:#C9A227;
+
+    box-shadow:0 0 0 3px rgba(201,162,39,.12);
+
+}
+
+/* ==========================
+   Icons
+========================== */
+
+.icon-wrapper{
+    position:relative;
+    color:#111;
+    text-decoration:none;
+}
+
+.icon{
+
+    font-size:19px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.icon:hover{
+
+    color:#C9A227;
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================
+   Badge
+========================== */
+
+.badge{
+
+    position:absolute;
+
+    top:-8px;
+    right:-10px;
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:#C9A227;
+
+    color:#fff;
+
+    font-size:10px;
+    font-weight:600;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* ==========================
+   Mobile Menu
+========================== */
+
+.menu-icon{
+
+    display:none;
+
+    font-size:24px;
+
+    color:#111;
+
+    cursor:pointer;
+}
+
+.menu-icon:hover{
+    color:#C9A227;
+}
+
+/* ==========================
+   Hover Effects
+========================== */
+
+.logo:hover{
+    transform:scale(1.03);
+}
+
+.search-box,
+.icon,
+.logo,
+.nav-links a{
+    transition:.3s ease;
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:1200px){
+
+.search-box{
+
+display:none;
+
+}
+
+}
+
+@media(max-width:992px){
+
+.nav-links{
+
+display:none;
+
+}
+
+.menu-icon{
+
+display:block;
+
+}
+
+}

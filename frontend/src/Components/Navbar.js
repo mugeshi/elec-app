@@ -1,40 +1,92 @@
 import "./Navbar.css";
+import { Link } from "react-router-dom";
+import {
+  FaSearch,
+  FaShoppingCart,
+  FaHeart,
+  FaUser,
+  FaBars,
+} from "react-icons/fa";
 
 function Navbar() {
   return (
     <nav className="navbar">
-      <div className="logo">
+      {/* Logo */}
+      <Link to="/" className="logo">
         Nivo <span>Tronics</span>
-      </div>
+      </Link>
 
+      {/* Navigation Links */}
       <ul className="nav-links">
-        <li><a href="/">Home</a></li>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
 
         <li className="dropdown">
-          <a href="/phones">Phones</a>
+          <Link to="/phones">Phones</Link>
+
           <ul className="dropdown-menu">
-            <li><a href="/phones/apple">Apple</a></li>
-            <li><a href="/phones/samsung">Samsung</a></li>
-            <li><a href="/phones/google">Google Pixel</a></li>
-            <li><a href="/phones/nothing">Nothing Phone</a></li>
-            <li><a href="/phones/oneplus">OnePlus</a></li>
-            <li><a href="/phones/xiaomi">Xiaomi</a></li>
-            <li><a href="/phones/oppo">Oppo</a></li>
-            <li><a href="/phones/vivo">Vivo</a></li>
-            <li><a href="/phones/huawei">Huawei</a></li>
+            <li><Link to="/phones/apple">Apple</Link></li>
+            <li><Link to="/phones/samsung">Samsung</Link></li>
+            <li><Link to="/phones/google">Google Pixel</Link></li>
+            <li><Link to="/phones/nothing">Nothing Phone</Link></li>
+            <li><Link to="/phones/oneplus">OnePlus</Link></li>
+            <li><Link to="/phones/xiaomi">Xiaomi</Link></li>
+            <li><Link to="/phones/oppo">Oppo</Link></li>
+            <li><Link to="/phones/vivo">Vivo</Link></li>
+            <li><Link to="/phones/huawei">Huawei</Link></li>
           </ul>
         </li>
 
-        <li><a href="/laptops">Laptops</a></li>
+        <li>
+          <Link to="/laptops">Laptops</Link>
+        </li>
 
-        <li><a href="/accessories">Accessories</a></li>
+        <li>
+          <Link to="/accessories">Accessories</Link>
+        </li>
 
-        <li><a href="/sell-phone">Sell Your Device</a></li>
+        <li>
+          <Link to="/sell-phone">Sell Device</Link>
+        </li>
 
-        <li><a href="/about">About</a></li>
-
-        <li><a href="/contact">Contact</a></li>
+        <li>
+          <Link to="/contact">Contact</Link>
+        </li>
       </ul>
+
+      {/* Right Side */}
+      <div className="nav-icons">
+
+        {/* Search */}
+        <div className="search-box">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search products..."
+          />
+        </div>
+
+        {/* Wishlist */}
+        <Link to="/wishlist" className="icon-wrapper">
+          <FaHeart className="icon" />
+          <span className="badge">0</span>
+        </Link>
+
+        {/* Cart */}
+        <Link to="/cart" className="icon-wrapper">
+          <FaShoppingCart className="icon" />
+          <span className="badge">0</span>
+        </Link>
+
+        {/* User */}
+        <Link to="/login">
+          <FaUser className="icon" />
+        </Link>
+
+        {/* Mobile Menu */}
+        <FaBars className="menu-icon" />
+      </div>
     </nav>
   );
 }

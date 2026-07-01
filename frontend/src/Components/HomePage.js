@@ -30,11 +30,7 @@ function HeroSection() {
         Your browser does not support the video tag.
       </video>
 
-      <div className="hero-content">
-        <h1>Nivo Tronics</h1>
-        <p>Premium iPhones & Samsung Devices</p>
-        <button>Shop Now</button>
-      </div>
+    
     </section>
   );
 }
