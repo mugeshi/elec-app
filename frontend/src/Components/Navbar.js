@@ -1,14 +1,28 @@
+import { useState } from "react";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaSearch,
   FaShoppingCart,
   FaHeart,
   FaUser,
   FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
-function Navbar() {
+function Navbar({ cartCount = 0, wishlistCount = 0 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm("");
+    }
+  };
+
   return (
     <nav className="navbar">
       {/* Logo */}
@@ -17,13 +31,13 @@ function Navbar() {
       </Link>
 
       {/* Navigation Links */}
-      <ul className="nav-links">
+      <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
         </li>
 
         <li className="dropdown">
-          <Link to="/phones">Phones</Link>
+          <Link to="/phones" onClick={() => setMenuOpen(false)}>Phones</Link>
 
           <ul className="dropdown-menu">
             <li><Link to="/phones/apple">Apple</Link></li>
@@ -39,53 +53,60 @@ function Navbar() {
         </li>
 
         <li>
-          <Link to="/laptops">Laptops</Link>
+          <Link to="/laptops" onClick={() => setMenuOpen(false)}>Laptops</Link>
         </li>
 
         <li>
-          <Link to="/accessories">Accessories</Link>
+          <Link to="/accessories" onClick={() => setMenuOpen(false)}>Accessories</Link>
         </li>
 
         <li>
-          <Link to="/sell-phone">Sell Device</Link>
+          <Link to="/sell-phone" onClick={() => setMenuOpen(false)}>Sell Device</Link>
         </li>
 
         <li>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
         </li>
       </ul>
 
       {/* Right Side */}
       <div className="nav-icons">
-
         {/* Search */}
-        <div className="search-box">
+        <form className="search-box" onSubmit={handleSearchSubmit}>
           <FaSearch className="search-icon" />
           <input
             type="text"
             placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
+        </form>
 
         {/* Wishlist */}
-        <Link to="/wishlist" className="icon-wrapper">
+        <Link to="/wishlist" className="icon-wrapper" aria-label="Wishlist">
           <FaHeart className="icon" />
-          <span className="badge">0</span>
+          <span className="badge">{wishlistCount}</span>
         </Link>
 
         {/* Cart */}
-        <Link to="/cart" className="icon-wrapper">
+        <Link to="/cart" className="icon-wrapper" aria-label="Cart">
           <FaShoppingCart className="icon" />
-          <span className="badge">0</span>
+          <span className="badge">{cartCount}</span>
         </Link>
 
         {/* User */}
-        <Link to="/login">
+        <Link to="/login" aria-label="Account">
           <FaUser className="icon" />
         </Link>
 
-        {/* Mobile Menu */}
-        <FaBars className="menu-icon" />
+        {/* Mobile Menu Toggle */}
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+        >
+          {menuOpen ? <FaTimes className="menu-icon" /> : <FaBars className="menu-icon" />}
+        </button>
       </div>
     </nav>
   );
