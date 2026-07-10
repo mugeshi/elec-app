@@ -9,6 +9,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .hero-content {
@@ -21,6 +22,7 @@
   text-align: center;
   color: white;
   background: rgba(0, 0, 0, 0.35);
+  padding: 0 20px;
 }
 
 .hero-content h1 {
@@ -40,4 +42,49 @@
   border: none;
   cursor: pointer;
   font-size: 1rem;
+  background: white;
+  color: #111;
+  font-weight: 600;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.hero-content button:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* ==========================
+   Tablet
+========================== */
+@media (max-width: 900px) {
+  .hero {
+    height: 65vh;
+  }
+
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .hero-content p {
+    font-size: 1.2rem;
+  }
+}
+
+/* ==========================
+   Mobile
+
+}
+
+/* ==========================
+   Very small phones / landscape mobile
+========================== */
+@media (max-width: 400px), (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    height: 50vh;
+    height: 50svh;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
 }
