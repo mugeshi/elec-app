@@ -1,74 +1,76 @@
 
-import { useState } from "react";
-import iphones from "../data/iphone";
+import { useEffect, useState } from "react";
 import "./Apple.css";
 
 function Apple() {
-  const [selectedColor, setSelectedColor] = useState(0);
+  const [products, setProducts] = useState([]);
 
-  const phone = iphones[0];
-  const color = phone.colors[selectedColor];
+  useEffect(() => {
+    function loadProducts() {
+      try {
+        const savedProducts = JSON.parse(
+          localStorage.getItem("nivoTronicsProducts") || "[]"
+        );
+
+        setProducts(
+          savedProducts.filter(
+            (product) =>
+              product.name?.toLowerCase().includes("iphone")
+          )
+        );
+      } catch (error) {
+        console.error("Could not load products:", error);
+        setProducts([]);
+      }
+    }
+
+    loadProducts();
+
+    window.addEventListener("storage", loadProducts);
+
+    return () => {
+      window.removeEventListener("storage", loadProducts);
+    };
+  }, []);
 
   return (
     <main className="apple-page">
-      <section className="apple-heading">
-        <p className="eyebrow">NIVO TRONICS</p>
-        <h1>Apple iPhones</h1>
-        <p>Find your perfect iPhone.</p>
-      </section>
+      <h1>Apple iPhones</h1>
+      <p>Explore our available iPhone models.</p>
 
-      <section className="iphone-grid">
-        <article className="iphone-card">
-          <div className="iphone-image">
-            <img
-              src={color.image}
-              alt={`${phone.name} ${color.name}`}
-            />
-          </div>
-
-          <div className="iphone-details">
-            <h2>{phone.name}</h2>
-
-            <p>{phone.storage}</p>
-
-            <h3>
-              KSh {phone.price.toLocaleString("en-KE")}
-            </h3>
-
-            <p>
-              Colour: <strong>{color.name}</strong>
-            </p>
-
-            <div className="color-options">
-              {phone.colors.map((item, index) => (
-                <button
-                  key={item.name}
-                  type="button"
-                  className={`color-circle ${
-                    selectedColor === index ? "selected" : ""
-                  }`}
-                  style={{ backgroundColor: item.hex }}
-                  onClick={() => setSelectedColor(index)}
-                  aria-label={`Select ${item.name}`}
-                  aria-pressed={selectedColor === index}
-                  title={item.name}
-                />
-              ))}
-            </div>
-
-            <a
-              className="iphone-button"
-              href={`https://wa.me/254113072550?text=${encodeURIComponent(
-                `Hello Nivo Tronics, I am interested in the ${phone.name} ${phone.storage} in ${color.name}. Is it available at KSh ${phone.price.toLocaleString("en-KE")}?`
-              )}`}
-              target="_blank"
-              rel="noreferrer"
+      {products.length === 0 ? (
+        <p>No iPhones available at the moment. Check back soon.</p>
+      ) : (
+        <div className="apple-product-grid">
+          {products.map((product) => (
+            <article
+              className="apple-product-card"
+              key={product.id}
             >
-              Inquire on WhatsApp
-            </a>
-          </div>
-        </article>
-      </section>
+              {product.images?.[0]?.data && (
+                <img
+                  src={product.images[0].data}
+                  alt={product.name}
+                />
+              )}
+
+              <h2>{product.name}</h2>
+              <p>Storage: {product.storage}</p>
+              <p>
+                Price: KSh{" "}
+                {Number(product.price).toLocaleString()}
+              </p>
+              <p>Available stock: {product.stock}</p>
+              <p>
+                Colors:{" "}
+                {product.colors?.length
+                  ? product.colors.join(", ")
+                  : "Contact us for available colors"}
+              </p>
+            </article>
+          ))}
+        </div>
+      )}
     </main>
   );
 }
