@@ -97,6 +97,8 @@ function Navbar({ cartCount = 0, wishlistCount = 0 }) {
         {/* User */}
         <Link to="/login" aria-label="Account">
           <FaUser className="icon" />
+
+          
         </Link>
 
         {/* Mobile Menu Toggle */}
