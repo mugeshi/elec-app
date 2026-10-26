@@ -25,11 +25,18 @@ function loadProducts() {
 function readImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () =>
+
+    reader.onload = () => {
       resolve({ name: file.name, data: reader.result });
+    };
+
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+function notifyProductsUpdated() {
+  window.dispatchEvent(new Event("nivoProductsUpdated"));
 }
 
 function ProductManager() {
@@ -42,13 +49,19 @@ function ProductManager() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
     } catch {
-      setMessage("Storage is full. Use smaller images or remove unused products.");
+      setMessage(
+        "Storage is full. Use smaller images or remove unused products."
+      );
     }
   }, [products]);
 
   function updateField(e) {
     const { name, value } = e.target;
-    setForm((current) => ({ ...current, [name]: value }));
+
+    setForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
   }
 
   function updateVariant(index, field, value) {
@@ -63,7 +76,10 @@ function ProductManager() {
   function addVariant() {
     setForm((current) => ({
       ...current,
-      variants: [...current.variants, { color: "", image: null }],
+      variants: [
+        ...current.variants,
+        { color: "", image: null },
+      ],
     }));
   }
 
@@ -108,19 +124,26 @@ function ProductManager() {
         setMessage("Please select image files only.");
         return false;
       }
+
       if (file.size > 500 * 1024) {
         setMessage("Each image must be 500 KB or smaller.");
         return false;
       }
+
       return true;
     });
 
     try {
       const images = await Promise.all(validFiles.map(readImage));
+
       setForm((current) => ({
         ...current,
-        legacyImages: [...current.legacyImages, ...images],
+        legacyImages: [
+          ...current.legacyImages,
+          ...images,
+        ],
       }));
+
       setMessage("");
     } catch {
       setMessage("Could not read the selected images.");
@@ -139,12 +162,16 @@ function ProductManager() {
       ? savedVariants
       : Array.isArray(product.colors) && product.colors.length
         ? product.colors.map((color, index) => ({
-            color: typeof color === "string" ? color : color.name || "",
+            color:
+              typeof color === "string"
+                ? color
+                : color.name || "",
             image: product.images?.[index] || null,
           }))
         : [{ color: "", image: null }];
 
     setEditingId(product.id);
+
     setForm({
       name: product.name || "",
       storage: product.storage || "",
@@ -153,16 +180,19 @@ function ProductManager() {
       variants,
       legacyImages: product.images || [],
     });
+
     setMessage("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function resetForm() {
     setEditingId(null);
+
     setForm({
       ...emptyForm,
       variants: [{ color: "", image: null }],
     });
+
     setMessage("");
   }
 
@@ -201,7 +231,9 @@ function ProductManager() {
         (variant) => variant.color.trim() && !variant.image
       )
     ) {
-      setMessage("Please upload an image for every colour you add.");
+      setMessage(
+        "Please upload an image for every colour you add."
+      );
       return;
     }
 
@@ -213,33 +245,59 @@ function ProductManager() {
       stock,
       colors: colorImages.map((variant) => variant.color),
       colorImages,
-      // Keep older general images for compatibility.
       images: form.legacyImages,
     };
 
     const updatedProducts = editingId
-      ? products.map((item) => item.id === editingId ? product : item)
+      ? products.map((item) =>
+          item.id === editingId ? product : item
+        )
       : [...products, product];
 
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(updatedProducts)
+      );
+
       setProducts(updatedProducts);
+      notifyProductsUpdated();
+
+      const wasEditing = editingId !== null;
       resetForm();
-      setMessage("Product saved successfully.");
+
+      setMessage(
+        wasEditing
+          ? "Product updated successfully."
+          : "Product saved successfully."
+      );
     } catch {
-      setMessage("Could not save. Storage may be full. Try smaller images.");
+      setMessage(
+        "Could not save. Storage may be full. Try smaller images."
+      );
     }
   }
 
   function deleteProduct(id) {
     if (!window.confirm("Delete this product?")) return;
 
-    const updatedProducts = products.filter((product) => product.id !== id);
+    const updatedProducts = products.filter(
+      (product) => product.id !== id
+    );
 
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
-      setProducts(updatedProducts);window.dispatchEvent(new Event("nivoProductsUpdated"));
-      if (editingId === id) resetForm();
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(updatedProducts)
+      );
+
+      setProducts(updatedProducts);
+      notifyProductsUpdated();
+
+      if (editingId === id) {
+        resetForm();
+      }
+
       setMessage("Product deleted.");
     } catch {
       setMessage("Could not update product storage.");
@@ -252,6 +310,7 @@ function ProductManager() {
     const link = document.createElement("a");
     link.href = image.data;
     link.download = image.name || "product-image";
+
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -260,12 +319,19 @@ function ProductManager() {
   return (
     <main className="product-manager">
       <h1>Arman Mobitech — Product Manager</h1>
-      <p>Add each phone model once, then attach an image to each colour.</p>
 
-      {message && <p className="pm-message" role="status">{message}</p>}
+      <p>
+        Add each phone model once, then attach an image to each colour.
+      </p>
+
+      {message && (
+        <p className="pm-message" role="status">
+          {message}
+        </p>
+      )}
 
       <form className="pm-form" onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit Product" : "Add New Product"}</h2>
+        <h2>{editingId !== null ? "Edit Product" : "Add New Product"}</h2>
 
         <label htmlFor="product-name">Phone model</label>
         <input
@@ -310,23 +376,30 @@ function ProductManager() {
         />
 
         <h3>Colour options and images</h3>
-        <p>Add a colour and upload the matching phone image for each option.</p>
+
+        <p>
+          Add each available colour and upload its matching phone image.
+        </p>
 
         {form.variants.map((variant, index) => (
           <div className="pm-variant-row" key={index}>
             <label htmlFor={`variant-color-${index}`}>
               Colour {index + 1}
             </label>
+
             <input
               id={`variant-color-${index}`}
               value={variant.color}
               placeholder="e.g. Black"
-              onChange={(e) => updateVariant(index, "color", e.target.value)}
+              onChange={(e) =>
+                updateVariant(index, "color", e.target.value)
+              }
             />
 
             <label htmlFor={`variant-image-${index}`}>
               Image for {variant.color || `colour ${index + 1}`}
             </label>
+
             <input
               id={`variant-image-${index}`}
               type="file"
@@ -336,8 +409,13 @@ function ProductManager() {
 
             {variant.image?.data && (
               <div className="pm-image-item">
-                <img src={variant.image.data} alt={variant.color} />
+                <img
+                  src={variant.image.data}
+                  alt={variant.color || "Product colour"}
+                />
+
                 <span>{variant.image.name}</span>
+
                 <button
                   type="button"
                   onClick={() => downloadImage(variant.image)}
@@ -364,28 +442,45 @@ function ProductManager() {
         </button>
 
         <details className="pm-legacy-images">
-          <summary>Optional: General product images (older products)</summary>
-          <p>Use this only for extra images not assigned to a specific colour.</p>
+          <summary>
+            Optional: General product images (older products)
+          </summary>
+
+          <p>
+            Use this only for extra images not assigned to a specific colour.
+          </p>
+
           <input
             type="file"
             accept="image/*"
             multiple
             onChange={handleLegacyImages}
           />
+
           {form.legacyImages.map((image, index) => (
-            <div className="pm-image-item" key={`${image.name}-${index}`}>
+            <div
+              className="pm-image-item"
+              key={`${image.name}-${index}`}
+            >
               <img src={image.data} alt={image.name} />
               <span>{image.name}</span>
-              <button type="button" onClick={() => downloadImage(image)}>
+
+              <button
+                type="button"
+                onClick={() => downloadImage(image)}
+              >
                 Download
               </button>
+
               <button
                 type="button"
                 className="pm-remove"
                 onClick={() =>
                   setForm((current) => ({
                     ...current,
-                    legacyImages: current.legacyImages.filter((_, i) => i !== index),
+                    legacyImages: current.legacyImages.filter(
+                      (_, i) => i !== index
+                    ),
                   }))
                 }
               >
@@ -397,10 +492,15 @@ function ProductManager() {
 
         <div className="pm-form-actions">
           <button type="submit">
-            {editingId ? "Save Changes" : "Add Product"}
+            {editingId !== null ? "Save Changes" : "Add Product"}
           </button>
-          {editingId && (
-            <button type="button" className="pm-cancel" onClick={resetForm}>
+
+          {editingId !== null && (
+            <button
+              type="button"
+              className="pm-cancel"
+              onClick={resetForm}
+            >
               Cancel Edit
             </button>
           )}
@@ -417,26 +517,49 @@ function ProductManager() {
             <div className="pm-product-info">
               <h3>{product.name}</h3>
               <p>Storage: {product.storage}</p>
-              <p>Price: KSh {Number(product.price).toLocaleString("en-KE")}</p>
-              <p>Stock: {product.stock}</p>
+
               <p>
-                Colours: {(product.colors || []).map((c) =>
-                  typeof c === "string" ? c : c.name
-                ).filter(Boolean).join(", ") || "Not specified"}
+                Price: KSh{" "}
+                {Number(product.price).toLocaleString("en-KE")}
+              </p>
+
+              <p>Stock: {product.stock}</p>
+
+              <p>
+                Colours:{" "}
+                {(product.colors || [])
+                  .map((color) =>
+                    typeof color === "string"
+                      ? color
+                      : color.name
+                  )
+                  .filter(Boolean)
+                  .join(", ") || "Not specified"}
               </p>
             </div>
 
             <div className="pm-image-grid">
               {(product.colorImages || []).map((variant, index) => (
-                <div className="pm-image-item" key={`${variant.color}-${index}`}>
+                <div
+                  className="pm-image-item"
+                  key={`${variant.color}-${index}`}
+                >
                   {variant.image?.data && (
-                    <img src={variant.image.data} alt={variant.color} />
+                    <img
+                      src={variant.image.data}
+                      alt={variant.color}
+                    />
                   )}
+
                   <span>{variant.color}</span>
                 </div>
               ))}
+
               {(product.images || []).map((image, index) => (
-                <div className="pm-image-item" key={`${image.name}-${index}`}>
+                <div
+                  className="pm-image-item"
+                  key={`${image.name}-${index}`}
+                >
                   <img src={image.data} alt={image.name} />
                   <span>{image.name}</span>
                 </div>
@@ -444,9 +567,13 @@ function ProductManager() {
             </div>
 
             <div className="pm-card-actions">
-              <button type="button" onClick={() => editProduct(product)}>
+              <button
+                type="button"
+                onClick={() => editProduct(product)}
+              >
                 Edit
               </button>
+
               <button
                 type="button"
                 className="pm-delete"
