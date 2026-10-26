@@ -1,162 +1,322 @@
 
+/* ================================
+   ARMAN MOBITECH - APPLE PRODUCTS
+================================ */
+
+/* Main page */
 .apple-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 24px;
-    color: #171717;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 40px 6%;
+  background: #f7f8fa;
+  color: #1b1b1b;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Page heading */
+.apple-heading {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 40px;
+}
+
+.apple-heading .eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #777;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.apple-heading h1 {
+  margin: 0 0 14px;
+  color: #111;
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.apple-heading p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* Product grid */
+.apple-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+/* Individual product card */
+.apple-product-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.045);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.apple-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.09);
+}
+
+/* Product image area */
+.apple-product-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 270px;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.apple-product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.apple-product-card:hover .apple-product-image img {
+  transform: scale(1.04);
+}
+
+/* Image fallback */
+.apple-no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  color: #888;
+  background: #f5f5f5;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* Product information */
+.apple-product-details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 22px;
+}
+
+.apple-product-details h2 {
+  margin: 0 0 10px;
+  color: #171717;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* Storage */
+.apple-storage {
+  margin: 0 0 14px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Price */
+.apple-product-price {
+  margin: 0 0 18px;
+  color: #111;
+  font-size: 23px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+/* Colours and stock information */
+.apple-product-colors,
+.apple-product-stock {
+  margin: 0 0 12px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.apple-product-colors strong,
+.apple-product-stock strong {
+  color: #222;
+}
+
+/* WhatsApp enquiry button */
+.apple-product-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+  margin-top: auto;
+  padding: 12px 16px;
+  background: #168b4b;
+  color: #fff;
+  border: 1px solid #168b4b;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.apple-product-button:hover {
+  background: #116f3b;
+  border-color: #116f3b;
+  transform: translateY(-1px);
+}
+
+.apple-product-button:focus-visible {
+  outline: 3px solid rgba(22, 139, 75, 0.3);
+  outline-offset: 3px;
+}
+
+/* Empty product message */
+.apple-empty {
+  max-width: 650px;
+  margin: 50px auto;
+  padding: 45px 25px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.apple-empty h2 {
+  margin: 0 0 12px;
+  color: #222;
+  font-size: 23px;
+}
+
+.apple-empty p {
+  margin: 0;
+  color: #777;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ================================
+   TABLET RESPONSIVENESS
+================================ */
+@media (max-width: 1024px) {
+  .apple-page {
+    padding: 35px 4%;
   }
-  
-  .apple-heading {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .eyebrow {
-    color: #a78324;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 3px;
-  }
-  
-  .apple-heading h1 {
-    font-size: 38px;
-    margin: 12px 0;
-  }
-  
-  .apple-heading p {
-    color: #666;
-  }
-  
-  .iphone-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  .apple-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px;
   }
-  
-  .iphone-card {
-    border: 1px solid #eee;
-    border-radius: 12px;
-    overflow: hidden;
-    background: white;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .iphone-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
-  
-  .iphone-image {
+
+  .apple-product-image {
     height: 250px;
-    padding: 18px;
-    background: #fafafa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
-  
-  .iphone-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+}
+
+/* ================================
+   MOBILE RESPONSIVENESS
+================================ */
+@media (max-width: 600px) {
+  .apple-page {
+    padding: 28px 16px;
   }
-  
-  .iphone-details {
-    padding: 18px;
+
+  .apple-heading {
+    margin-bottom: 28px;
   }
-  
-  .iphone-details h2 {
-    font-size: 20px;
-    margin: 0 0 8px;
+
+  .apple-heading .eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
   }
-  
-  .iphone-details p {
-    color: #666;
+
+  .apple-heading h1 {
+    font-size: 30px;
+  }
+
+  .apple-heading p {
     font-size: 14px;
   }
-  
-  .iphone-details h3 {
-    font-size: 19px;
-    margin: 16px 0;
-    color: #171717;
+
+  .apple-product-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
   }
-  
-  .color-options {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 15px 0 22px;
+
+  .apple-product-card {
+    max-width: 440px;
+    width: 100%;
+    margin: 0 auto;
   }
-  
-  .color-circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid #ddd;
-    outline: 2px solid transparent;
-    outline-offset: 3px;
-    cursor: pointer;
+
+  .apple-product-image {
+    height: 280px;
+    padding: 22px;
   }
-  
-  .color-circle.selected {
-    outline-color: #a78324;
+
+  .apple-product-details {
+    padding: 20px;
   }
-  
-  .iphone-button {
-    display: block;
-    padding: 12px;
-    background: #171717;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 13px;
+
+  .apple-product-details h2 {
+    font-size: 20px;
   }
-  
-  .iphone-button:hover {
-    background: #a78324;
+
+  .apple-product-price {
+    font-size: 22px;
   }
-  
-  @media (max-width: 900px) {
-    .iphone-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+
+  .apple-empty {
+    margin: 30px auto;
+    padding: 32px 20px;
   }
-  
-  @media (max-width: 480px) {
-    .apple-page {
-      padding: 28px 14px;
-    }
-  
-    .apple-heading h1 {
-      font-size: 30px;
-    }
-  
-    .iphone-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-  
-    .iphone-image {
-      height: 170px;
-      padding: 10px;
-    }
-  
-    .iphone-details {
-      padding: 12px;
-    }
-  
-    .iphone-details h2 {
-      font-size: 16px;
-    }
-  
-    .iphone-details h3 {
-      font-size: 16px;
-    }
-  
-    .iphone-button {
-      font-size: 12px;
-      padding: 10px 5px;
-    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .apple-product-card,
+  .apple-product-image img,
+  .apple-product-button {
+    transition: none;
   }
-  
+
+  .apple-product-card:hover,
+  .apple-product-button:hover {
+    transform: none;
+  }
+
+  .apple-product-card:hover .apple-product-image img {
+    transform: none;
+  }
+}
