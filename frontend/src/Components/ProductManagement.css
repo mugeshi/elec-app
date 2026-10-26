@@ -164,4 +164,56 @@
     width: 100%;
     height: 130px;
   }
+
+/* Colour and image management */
+.pm-variant-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0;
+  padding: 16px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+}
+
+.pm-variant-row label {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.pm-variant-row input[type="text"],
+.pm-variant-row input:not([type]) {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pm-variant-row input[type="file"] {
+  width: 100%;
+  max-width: 100%;
+  font-size: 13px;
+}
+
+.pm-variant-row .pm-image-item {
+  max-width: 220px;
+}
+
+.pm-variant-row .pm-image-item img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+.pm-legacy-images {
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.pm-legacy-images summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
 }

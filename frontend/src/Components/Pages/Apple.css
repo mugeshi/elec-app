@@ -319,4 +319,71 @@
   .apple-product-card:hover .apple-product-image img {
     transform: none;
   }
+
+/* Colour selector */
+.apple-colour-section {
+  width: 100%;
+  margin: 0 0 18px;
+}
+
+.apple-colour-label {
+  margin: 0 0 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+.apple-colour-label strong {
+  color: #222;
+}
+
+.apple-colour-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-items: center;
+}
+
+.apple-colour-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 3px;
+  overflow: hidden;
+  background: #fff;
+  border: 2px solid #dedede;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.apple-colour-option:hover {
+  border-color: #888;
+  transform: translateY(-1px);
+}
+
+.apple-colour-option.selected {
+  border-color: #111;
+  box-shadow: 0 0 0 1px #111;
+}
+
+.apple-colour-thumb {
+  display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.apple-colour-text {
+  padding: 5px;
+  color: #333;
+  font-size: 12px;
+}
+
+.apple-colour-option:focus-visible {
+  outline: 3px solid #888;
+  outline-offset: 3px;
+}
+
 }
