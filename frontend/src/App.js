@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import HomePage from "./Components/HomePage";
 import Apple from "./Components/Pages/Apple";
+import Samsung from "./Components/Pages/Samsung";
 import ProductManagement from "./Components/ProductManagement";
 import AdminLogin from "./Components/Pages/AdminLogin";
 
@@ -24,8 +25,13 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+
         <Route path="/phones/apple" element={<Apple />} />
+
+        <Route path="/phones/samsung" element={<Samsung />} />
+
         <Route path="/admin/login" element={<AdminLogin />} />
+
         <Route
           path="/admin/products"
           element={<ProtectedAdmin />}
