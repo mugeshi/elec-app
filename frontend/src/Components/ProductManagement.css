@@ -216,4 +216,69 @@
   font-weight: 600;
 }
 
+/* Brand page selection */
+
+.pm-brand-selection {
+  margin: 24px 0;
+  padding: 18px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+}
+
+.pm-brand-selection h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.pm-brand-selection p {
+  color: #666;
+  font-size: 14px;
+}
+
+.pm-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.pm-brand-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.pm-brand-option input {
+  width: 17px;
+  height: 17px;
+  accent-color: #c9a227;
+  cursor: pointer;
+}
+
+.pm-brand-option span {
+  font-size: 14px;
+}
+
+.pm-brand-help {
+  margin-bottom: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .pm-brand-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-brand-selection {
+    padding: 13px;
+  }
+}
+
+
 }
