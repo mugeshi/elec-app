@@ -4,11 +4,24 @@ import "./ProductManagement.css";
 
 const STORAGE_KEY = "nivoTronicsProducts";
 
+const BRAND_OPTIONS = [
+  "Apple",
+  "Samsung",
+  "Google Pixel",
+  "Nothing Phone",
+  "OnePlus",
+  "Xiaomi",
+  "Oppo",
+  "Vivo",
+  "Huawei",
+];
+
 const emptyForm = {
   name: "",
   storage: "",
   price: "",
   stock: "",
+  brands: ["Apple"],
   variants: [{ color: "", image: null }],
   legacyImages: [],
 };
@@ -25,11 +38,8 @@ function loadProducts() {
 function readImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-
-    reader.onload = () => {
+    reader.onload = () =>
       resolve({ name: file.name, data: reader.result });
-    };
-
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
@@ -37,6 +47,33 @@ function readImage(file) {
 
 function notifyProductsUpdated() {
   window.dispatchEvent(new Event("nivoProductsUpdated"));
+}
+
+function getProductBrands(product) {
+  // Keep existing products working by inferring their brand from the name.
+  if (Array.isArray(product.brands) && product.brands.length) {
+    return product.brands;
+  }
+
+  const name = (product.name || "").toLowerCase();
+
+  if (name.includes("samsung") || name.includes("galaxy")) {
+    return ["Samsung"];
+  }
+  if (name.includes("pixel")) return ["Google Pixel"];
+  if (name.includes("nothing")) return ["Nothing Phone"];
+  if (name.includes("oneplus")) return ["OnePlus"];
+  if (name.includes("xiaomi") || name.includes("redmi") || name.includes("poco")) {
+    return ["Xiaomi"];
+  }
+  if (name.includes("oppo")) return ["Oppo"];
+  if (name.includes("vivo")) return ["Vivo"];
+  if (name.includes("huawei")) return ["Huawei"];
+  if (name.toLowerCase().includes("iphone") || name.toLowerCase().includes("ipad")) {
+    return ["Apple"];
+  }
+
+  return [];
 }
 
 function ProductManager() {
@@ -57,10 +94,15 @@ function ProductManager() {
 
   function updateField(e) {
     const { name, value } = e.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  }
 
+  function toggleBrand(brand) {
     setForm((current) => ({
       ...current,
-      [name]: value,
+      brands: current.brands.includes(brand)
+        ? current.brands.filter((item) => item !== brand)
+        : [...current.brands, brand],
     }));
   }
 
@@ -76,10 +118,7 @@ function ProductManager() {
   function addVariant() {
     setForm((current) => ({
       ...current,
-      variants: [
-        ...current.variants,
-        { color: "", image: null },
-      ],
+      variants: [...current.variants, { color: "", image: null }],
     }));
   }
 
@@ -138,10 +177,7 @@ function ProductManager() {
 
       setForm((current) => ({
         ...current,
-        legacyImages: [
-          ...current.legacyImages,
-          ...images,
-        ],
+        legacyImages: [...current.legacyImages, ...images],
       }));
 
       setMessage("");
@@ -163,9 +199,7 @@ function ProductManager() {
       : Array.isArray(product.colors) && product.colors.length
         ? product.colors.map((color, index) => ({
             color:
-              typeof color === "string"
-                ? color
-                : color.name || "",
+              typeof color === "string" ? color : color.name || "",
             image: product.images?.[index] || null,
           }))
         : [{ color: "", image: null }];
@@ -177,6 +211,7 @@ function ProductManager() {
       storage: product.storage || "",
       price: String(product.price ?? ""),
       stock: String(product.stock ?? ""),
+      brands: getProductBrands(product),
       variants,
       legacyImages: product.images || [],
     });
@@ -187,12 +222,12 @@ function ProductManager() {
 
   function resetForm() {
     setEditingId(null);
-
     setForm({
       ...emptyForm,
+      brands: ["Apple"],
       variants: [{ color: "", image: null }],
+      legacyImages: [],
     });
-
     setMessage("");
   }
 
@@ -219,6 +254,11 @@ function ProductManager() {
       return;
     }
 
+    if (!form.brands.length) {
+      setMessage("Please select at least one brand page.");
+      return;
+    }
+
     const colorImages = form.variants
       .filter((variant) => variant.color.trim())
       .map((variant) => ({
@@ -231,35 +271,35 @@ function ProductManager() {
         (variant) => variant.color.trim() && !variant.image
       )
     ) {
-      setMessage(
-        "Please upload an image for every colour you add."
-      );
+      setMessage("Please upload an image for every colour you add.");
       return;
     }
 
+    const existingProduct = products.find(
+      (item) => item.id === editingId
+    );
+
     const product = {
+      ...existingProduct,
       id: editingId ?? Date.now(),
       name,
       storage,
       price,
       stock,
+      brands: [...form.brands],
       colors: colorImages.map((variant) => variant.color),
       colorImages,
       images: form.legacyImages,
     };
 
-    const updatedProducts = editingId
+    const updatedProducts = editingId !== null
       ? products.map((item) =>
           item.id === editingId ? product : item
         )
       : [...products, product];
 
     try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(updatedProducts)
-      );
-
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
       setProducts(updatedProducts);
       notifyProductsUpdated();
 
@@ -286,17 +326,11 @@ function ProductManager() {
     );
 
     try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(updatedProducts)
-      );
-
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
       setProducts(updatedProducts);
       notifyProductsUpdated();
 
-      if (editingId === id) {
-        resetForm();
-      }
+      if (editingId === id) resetForm();
 
       setMessage("Product deleted.");
     } catch {
@@ -310,7 +344,6 @@ function ProductManager() {
     const link = document.createElement("a");
     link.href = image.data;
     link.download = image.name || "product-image";
-
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -318,10 +351,10 @@ function ProductManager() {
 
   return (
     <main className="product-manager">
-      <h1>Arman Mobitech — Product Manager</h1>
+      <h1>Nivo Tronics — Product Manager</h1>
 
       <p>
-        Add each phone model once, then attach an image to each colour.
+        Add a product and choose which brand pages should display it.
       </p>
 
       {message && (
@@ -333,11 +366,11 @@ function ProductManager() {
       <form className="pm-form" onSubmit={handleSubmit}>
         <h2>{editingId !== null ? "Edit Product" : "Add New Product"}</h2>
 
-        <label htmlFor="product-name">Phone model</label>
+        <label htmlFor="product-name">Product name</label>
         <input
           id="product-name"
           name="name"
-          placeholder="e.g. iPhone 11"
+          placeholder="e.g. iPhone 11 or Galaxy S24 Ultra"
           value={form.name}
           onChange={updateField}
           required
@@ -375,11 +408,32 @@ function ProductManager() {
           required
         />
 
-        <h3>Colour options and images</h3>
+        <section className="pm-brand-selection">
+          <h3>Display product in</h3>
+          <p>Select every brand page where this product should appear.</p>
 
-        <p>
-          Add each available colour and upload its matching phone image.
-        </p>
+          <div className="pm-brand-grid">
+            {BRAND_OPTIONS.map((brand) => (
+              <label className="pm-brand-option" key={brand}>
+                <input
+                  type="checkbox"
+                  checked={form.brands.includes(brand)}
+                  onChange={() => toggleBrand(brand)}
+                />
+                <span>{brand}</span>
+              </label>
+            ))}
+          </div>
+
+          <p className="pm-brand-help">
+            Selected: {form.brands.length
+              ? form.brands.join(", ")
+              : "No brand selected"}
+          </p>
+        </section>
+
+        <h3>Colour options and images</h3>
+        <p>Add each available colour and upload its matching phone image.</p>
 
         {form.variants.map((variant, index) => (
           <div className="pm-variant-row" key={index}>
@@ -409,13 +463,8 @@ function ProductManager() {
 
             {variant.image?.data && (
               <div className="pm-image-item">
-                <img
-                  src={variant.image.data}
-                  alt={variant.color || "Product colour"}
-                />
-
+                <img src={variant.image.data} alt={variant.color || "Product colour"} />
                 <span>{variant.image.name}</span>
-
                 <button
                   type="button"
                   onClick={() => downloadImage(variant.image)}
@@ -442,13 +491,8 @@ function ProductManager() {
         </button>
 
         <details className="pm-legacy-images">
-          <summary>
-            Optional: General product images (older products)
-          </summary>
-
-          <p>
-            Use this only for extra images not assigned to a specific colour.
-          </p>
+          <summary>Optional: General product images (older products)</summary>
+          <p>Use this for extra images not assigned to a specific colour.</p>
 
           <input
             type="file"
@@ -458,10 +502,7 @@ function ProductManager() {
           />
 
           {form.legacyImages.map((image, index) => (
-            <div
-              className="pm-image-item"
-              key={`${image.name}-${index}`}
-            >
+            <div className="pm-image-item" key={`${image.name}-${index}`}>
               <img src={image.data} alt={image.name} />
               <span>{image.name}</span>
 
@@ -517,21 +558,17 @@ function ProductManager() {
             <div className="pm-product-info">
               <h3>{product.name}</h3>
               <p>Storage: {product.storage}</p>
-
               <p>
-                Price: KSh{" "}
-                {Number(product.price).toLocaleString("en-KE")}
+                Price: KSh {Number(product.price).toLocaleString("en-KE")}
               </p>
-
               <p>Stock: {product.stock}</p>
-
               <p>
-                Colours:{" "}
-                {(product.colors || [])
+                Display pages: {getProductBrands(product).join(", ") || "Not assigned"}
+              </p>
+              <p>
+                Colours: {(product.colors || [])
                   .map((color) =>
-                    typeof color === "string"
-                      ? color
-                      : color.name
+                    typeof color === "string" ? color : color.name
                   )
                   .filter(Boolean)
                   .join(", ") || "Not specified"}
@@ -545,12 +582,8 @@ function ProductManager() {
                   key={`${variant.color}-${index}`}
                 >
                   {variant.image?.data && (
-                    <img
-                      src={variant.image.data}
-                      alt={variant.color}
-                    />
+                    <img src={variant.image.data} alt={variant.color} />
                   )}
-
                   <span>{variant.color}</span>
                 </div>
               ))}
@@ -567,13 +600,9 @@ function ProductManager() {
             </div>
 
             <div className="pm-card-actions">
-              <button
-                type="button"
-                onClick={() => editProduct(product)}
-              >
+              <button type="button" onClick={() => editProduct(product)}>
                 Edit
               </button>
-
               <button
                 type="button"
                 className="pm-delete"
